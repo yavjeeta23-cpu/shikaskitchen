@@ -44,7 +44,7 @@ let CONTENT = {
 };
 
 function loadContent() {
-  return fetch('content.json?' + Date.now())
+  return fetch(CONTENT_URL + '?' + Date.now())
     .then(function(r) { return r.ok ? r.json() : null; })
     .then(function(data) {
       if (data) CONTENT = data;
@@ -55,7 +55,7 @@ function loadContent() {
 }
 
 function saveContent() {
-  return fetch('/api/save', {
+  return fetch(SAVE_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(CONTENT, null, 2)
@@ -74,18 +74,14 @@ function saveContent() {
 }
 
 /* ---- detect local vs live ---- */
-const IS_LOCAL = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const IS_LOCAL   = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const CONTENT_URL = IS_LOCAL ? 'content.json'   : '/.netlify/functions/content';
+const SAVE_URL    = IS_LOCAL ? '/api/save'       : '/.netlify/functions/save';
 
 function applyReadOnlyMode() {
-  if (IS_LOCAL) return;
+  // Admin panel is fully functional on both local and live (Netlify Blobs)
   const warn = document.getElementById('localWarn');
-  if (warn) warn.style.display = 'block';
-  // disable every save/add/delete button
-  document.querySelectorAll('.btn-a:not(.outline), .del-special, .pin-btn').forEach(function(btn) {
-    btn.disabled = true;
-    btn.style.opacity = '0.4';
-    btn.style.cursor = 'not-allowed';
-  });
+  if (warn) warn.style.display = 'none';
 }
 
 /* ---- INIT ---- */

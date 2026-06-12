@@ -6,8 +6,12 @@ const MIN_ORDER   = 200;
 const MAX_PORTIONS = 25;
 
 /* ---- site settings (overridable from admin) ---- */
-/* ---- content.json (single source of truth, written by admin server) ---- */
+/* ---- content source (local server or Netlify Functions) ---- */
 let _siteContent = null;
+const _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const _contentUrl  = _isLocal ? 'content.json'       : '/.netlify/functions/content';
+const _saveUrl     = _isLocal ? '/api/save'           : '/.netlify/functions/save';
+const _reviewUrl   = _isLocal ? '/api/review'         : '/.netlify/functions/review';
 
 function getSiteSettings(){
   return (_siteContent && _siteContent.siteSettings) || {};
@@ -1036,7 +1040,7 @@ function initReviewForm(){
     litStars(5);
     if(charCount) charCount.textContent = '0';
 
-    fetch('/api/review', {
+    fetch(_reviewUrl, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(newReview)
@@ -1213,7 +1217,7 @@ function initQR(){
 /* ---- init ---- */
 /* ---- content.json loader (single source of truth) ---- */
 function loadContentJson(){
-  return fetch('content.json?_=' + Date.now())
+  return fetch(_contentUrl + '?_=' + Date.now())
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(data){
       if(data) _siteContent = data;

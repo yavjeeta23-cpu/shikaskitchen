@@ -1,10 +1,17 @@
 [build]
   publish = "."
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  included_files = ["content.json"]
+
 [[headers]]
-  for = "/content.json"
+  for = "/.netlify/functions/*"
   [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
 
 [[headers]]
   for = "/*"
