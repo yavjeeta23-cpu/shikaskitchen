@@ -1219,10 +1219,16 @@ function initQR(){
 function loadContentJson(){
   return fetch(_contentUrl + '?_=' + Date.now())
     .then(function(r){ return r.ok ? r.json() : null; })
-    .then(function(data){
-      if(data) _siteContent = data;
-    })
-    .catch(function(){ /* running as file:// — _siteContent stays null, defaults used */ });
+    .then(function(data){ if(data) _siteContent = data; })
+    .catch(function(){})
+    .then(function(){
+      // If function failed or returned nothing, fall back to static content.json
+      if(_siteContent) return;
+      return fetch('content.json?_=' + Date.now())
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(data){ if(data) _siteContent = data; })
+        .catch(function(){});
+    });
 }
 
 function applySocialLinks(){

@@ -46,11 +46,15 @@ let CONTENT = {
 function loadContent() {
   return fetch(CONTENT_URL + '?' + Date.now())
     .then(function(r) { return r.ok ? r.json() : null; })
-    .then(function(data) {
-      if (data) CONTENT = data;
-    })
-    .catch(function() {
-      showAdminToast('content.json not found — run via server.js');
+    .then(function(data) { if (data) CONTENT = data; })
+    .catch(function() {})
+    .then(function() {
+      if (CONTENT && CONTENT.faqs) return; // already loaded
+      // fallback to static content.json
+      return fetch('content.json?' + Date.now())
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(data) { if (data) CONTENT = data; })
+        .catch(function() { showAdminToast('Could not load content.json'); });
     });
 }
 
