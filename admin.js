@@ -44,18 +44,10 @@ let CONTENT = {
 };
 
 function loadContent() {
-  return fetch(CONTENT_URL + '?' + Date.now())
+  return fetch('content.json?' + Date.now())
     .then(function(r) { return r.ok ? r.json() : null; })
     .then(function(data) { if (data) CONTENT = data; })
-    .catch(function() {})
-    .then(function() {
-      if (CONTENT && CONTENT.faqs) return; // already loaded
-      // fallback to static content.json
-      return fetch('content.json?' + Date.now())
-        .then(function(r) { return r.ok ? r.json() : null; })
-        .then(function(data) { if (data) CONTENT = data; })
-        .catch(function() { showAdminToast('Could not load content.json'); });
-    });
+    .catch(function() { showAdminToast('Could not load content.json'); });
 }
 
 function saveContent() {
@@ -78,9 +70,8 @@ function saveContent() {
 }
 
 /* ---- detect local vs live ---- */
-const IS_LOCAL   = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-const CONTENT_URL = IS_LOCAL ? 'content.json'   : '/.netlify/functions/content';
-const SAVE_URL    = IS_LOCAL ? '/api/save'       : '/.netlify/functions/save';
+const IS_LOCAL = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const SAVE_URL = IS_LOCAL ? '/api/save' : '/.netlify/functions/save';
 
 function applyReadOnlyMode() {
   // Admin panel is fully functional on both local and live (Netlify Blobs)
