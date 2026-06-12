@@ -25,6 +25,7 @@ function githubRequest(method, path, body, token) {
         'User-Agent': 'shikaskitchen-admin',
         'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache',
         ...(data ? { 'Content-Length': Buffer.byteLength(data) } : {})
       }
     }, function(res) {
@@ -63,7 +64,7 @@ exports.handler = async function(event) {
 
     // Get current content.json + SHA
     const current = await githubRequest('GET',
-      '/repos/' + OWNER + '/' + REPO + '/contents/' + FILE,
+      '/repos/' + OWNER + '/' + REPO + '/contents/' + FILE + '?ref=main&t=' + Date.now(),
       null, token);
 
     if (current.status !== 200) throw new Error('Could not fetch file');
