@@ -465,7 +465,7 @@ function renderDrawer(){
     const m=mergedMenu.find(function(x){return x.id===id;}); if(m) subtotal+=m.p*v.qty;
   });
   const bowlChecked = qs('#bowlToggle')?.checked;
-  const bowlFee = bowlChecked?25:0;
+  const bowlFee = bowlChecked ? 25 * totalPortions() : 0;
   const total = subtotal+bowlFee;
   const under = (subtotal+bowlFee)<MIN_ORDER;
   const portions = totalPortions();
@@ -579,9 +579,10 @@ function buildWAMessage(){
     lines.push('- '+m.n+' x'+v.qty+' - Rs '+(m.p*v.qty)+(extras.length?' ('+extras.join(', ')+')':''));
     subtotal+=m.p*v.qty;
   });
-  const bowlFee=bowls?25:0;
+  const portions=totalPortions();
+  const bowlFee=bowls?25*portions:0;
   lines.push('','Subtotal: Rs '+subtotal);
-  if(bowls) lines.push('Takeaway bowls: Yes (+Rs 25)');
+  if(bowls) lines.push('Takeaway bowls: Yes (Rs 25 × '+portions+' portions = +Rs '+bowlFee+')');
   if(selectedDay) lines.push('Pickup: '+selectedDay+' at '+selectedTime);
   lines.push('','Total: Rs '+(subtotal+bowlFee));
   return lines.join('\n');
@@ -783,7 +784,7 @@ function generateDoc(type){
   var name = (qs('#custName')?.value||'').trim() || 'Customer';
   var phone = (qs('#custPhone')?.value||'').trim();
   var slot = qs('.pill.active')?.textContent || '';
-  var bowlFee = qs('#bowlToggle')?.checked ? 25 : 0;
+  var bowlFee = qs('#bowlToggle')?.checked ? 25 * totalPortions() : 0;
   var subtotal = 0;
   var rows = '';
   var num = 'SK-' + Date.now().toString().slice(-6);
