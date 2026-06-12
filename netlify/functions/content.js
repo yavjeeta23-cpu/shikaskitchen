@@ -18,7 +18,7 @@ exports.handler = async function() {
       };
     }
     // First-time fallback: serve the static content.json bundled with the deploy
-    const staticPath = path.join(__dirname, '..', '..', 'content.json');
+    const staticPath = path.join(__dirname, 'content.json');
     const staticData = fs.readFileSync(staticPath, 'utf8');
     return {
       statusCode: 200,

@@ -19,7 +19,7 @@ exports.handler = async function(event) {
     if (existing) {
       content = JSON.parse(existing);
     } else {
-      const staticPath = path.join(__dirname, '..', '..', 'content.json');
+      const staticPath = path.join(__dirname, 'content.json');
       content = JSON.parse(fs.readFileSync(staticPath, 'utf8'));
     }
 
