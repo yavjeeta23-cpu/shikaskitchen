@@ -1,42 +1,95 @@
 /* Netlify Function — POST /.netlify/functions/review
-   Appends a customer review to testimonials in Netlify Blobs.
+   Appends a customer review to content.json via GitHub API.
 */
-const { getStore } = require('@netlify/blobs');
-const fs   = require('fs');
-const path = require('path');
+const https = require('https');
+
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type'
+};
+
+const OWNER = 'yavjeeta23-cpu';
+const REPO  = 'shikaskitchen';
+const FILE  = 'content.json';
+
+function githubRequest(method, path, body, token) {
+  return new Promise(function(resolve, reject) {
+    const data = body ? JSON.stringify(body) : null;
+    const req = https.request({
+      hostname: 'api.github.com',
+      path: path,
+      method: method,
+      headers: {
+        'Authorization': 'token ' + token,
+        'User-Agent': 'shikaskitchen-admin',
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json',
+        ...(data ? { 'Content-Length': Buffer.byteLength(data) } : {})
+      }
+    }, function(res) {
+      let raw = '';
+      res.on('data', function(c) { raw += c; });
+      res.on('end', function() {
+        try { resolve({ status: res.statusCode, body: JSON.parse(raw) }); }
+        catch(e) { resolve({ status: res.statusCode, body: raw }); }
+      });
+    });
+    req.on('error', reject);
+    if (data) req.write(data);
+    req.end();
+  });
+}
 
 exports.handler = async function(event) {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: CORS, body: '' };
   }
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, headers: CORS, body: 'Method Not Allowed' };
+  }
+
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) {
+    return {
+      statusCode: 500,
+      headers: { ...CORS, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ok: false, error: 'GITHUB_TOKEN not configured' })
+    };
+  }
+
   try {
     const review = JSON.parse(event.body);
-    const store  = getStore('site-content');
 
-    // Load current content (blobs first, then static fallback)
-    let content;
-    const existing = await store.get('content');
-    if (existing) {
-      content = JSON.parse(existing);
-    } else {
-      const staticPath = path.join(__dirname, 'content.json');
-      content = JSON.parse(fs.readFileSync(staticPath, 'utf8'));
-    }
+    // Get current content.json + SHA
+    const current = await githubRequest('GET',
+      '/repos/' + OWNER + '/' + REPO + '/contents/' + FILE,
+      null, token);
+
+    if (current.status !== 200) throw new Error('Could not fetch file');
+
+    const sha = current.body.sha;
+    const content = JSON.parse(Buffer.from(current.body.content, 'base64').toString('utf8'));
 
     content.testimonials = content.testimonials || [];
     content.testimonials.unshift(review);
 
-    await store.set('content', JSON.stringify(content, null, 2));
+    const encoded = Buffer.from(JSON.stringify(content, null, 2)).toString('base64');
+
+    await githubRequest('PUT',
+      '/repos/' + OWNER + '/' + REPO + '/contents/' + FILE,
+      { message: 'New customer review', content: encoded, sha: sha },
+      token);
 
     return {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { ...CORS, 'Content-Type': 'application/json' },
       body: JSON.stringify({ ok: true })
     };
   } catch (e) {
     return {
       statusCode: 400,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { ...CORS, 'Content-Type': 'application/json' },
       body: JSON.stringify({ ok: false, error: e.message })
     };
   }

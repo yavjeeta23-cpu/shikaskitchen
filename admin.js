@@ -59,9 +59,9 @@ function saveContent() {
   .then(function(r) { return r.ok ? r.json() : null; })
   .then(function(res) {
     if (res && res.ok) {
-      showAdminToast('Saved to content.json!');
+      showAdminToast(res.message || 'Saved!');
     } else {
-      showAdminToast('Save failed — is the server running?');
+      showAdminToast('Save failed — ' + ((res && res.error) || 'check Netlify env vars'));
     }
   })
   .catch(function() {
