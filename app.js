@@ -1243,8 +1243,7 @@ function applyClosureBanner(){
     banner.style.display = 'block';
   } else {
     banner.style.display = 'none';
-    }
-  } catch(e){}
+  }
 }
 
 function init(){
