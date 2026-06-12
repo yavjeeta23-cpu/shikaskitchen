@@ -6,12 +6,11 @@ const MIN_ORDER   = 200;
 const MAX_PORTIONS = 25;
 
 /* ---- site settings (overridable from admin) ---- */
-/* ---- content source (local server or Netlify Functions) ---- */
+/* ---- content source ---- */
 let _siteContent = null;
-const _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-const _contentUrl  = _isLocal ? 'content.json'       : '/.netlify/functions/content';
-const _saveUrl     = _isLocal ? '/api/save'           : '/.netlify/functions/save';
-const _reviewUrl   = _isLocal ? '/api/review'         : '/.netlify/functions/review';
+const _isLocal   = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const _saveUrl   = _isLocal ? '/api/save'   : '/.netlify/functions/save';
+const _reviewUrl = _isLocal ? '/api/review' : '/.netlify/functions/review';
 
 function getSiteSettings(){
   return (_siteContent && _siteContent.siteSettings) || {};
@@ -1217,18 +1216,10 @@ function initQR(){
 /* ---- init ---- */
 /* ---- content.json loader (single source of truth) ---- */
 function loadContentJson(){
-  return fetch(_contentUrl + '?_=' + Date.now())
+  return fetch('content.json?_=' + Date.now())
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(data){ if(data) _siteContent = data; })
-    .catch(function(){})
-    .then(function(){
-      // If function failed or returned nothing, fall back to static content.json
-      if(_siteContent) return;
-      return fetch('content.json?_=' + Date.now())
-        .then(function(r){ return r.ok ? r.json() : null; })
-        .then(function(data){ if(data) _siteContent = data; })
-        .catch(function(){});
-    });
+    .catch(function(){});
 }
 
 function applySocialLinks(){

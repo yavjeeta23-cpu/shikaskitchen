@@ -6,9 +6,6 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-[functions."content"]
-  included_files = ["content.json"]
-
 [functions."review"]
   included_files = ["content.json"]
 
