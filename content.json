@@ -25,7 +25,33 @@
     "enabled": false,
     "message": "We are closed this weekend. We will be back next weekend — thank you for your patience!"
   },
-  "orders": [],
+  "orders": [
+    {
+      "date": 1781281620457,
+      "customer": "Ushika Jeeta",
+      "phone": "+23058290809",
+      "items": [
+        {
+          "id": 0,
+          "name": "Traditional 7 Curries",
+          "qty": 1,
+          "price": 150,
+          "note": ""
+        },
+        {
+          "id": 1,
+          "name": "Mauritian Fish Curry",
+          "qty": 1,
+          "price": 190,
+          "note": ""
+        }
+      ],
+      "bowls": true,
+      "total": 390,
+      "pickupDay": "",
+      "pickupTime": ""
+    }
+  ],
   "specials": [],
   "testimonials": [],
   "menuOverrides": {
