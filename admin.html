@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>Shika's Kitchen — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--green:#1B3A2D;--gold:#C9A84C;--gold-soft:#D9BE74;--cream:#F5F0E8;--cream-deep:#EFE8DA;--red:#A8412F;--ink:#2A2A24;--muted:#6E6A5E}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* PIN GATE */
+#pinGate{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#15301f,var(--green))}
+.pin-box{background:var(--cream);padding:48px 38px;max-width:360px;width:calc(100vw - 32px);text-align:center}
+.pin-box h1{font-family:'Cormorant Garamond',serif;color:var(--green);font-size:2rem;margin-bottom:6px}
+.pin-box p{color:var(--muted);font-size:.9rem;margin-bottom:28px}
+.pin-box input{width:100%;padding:13px;border:1px solid var(--gold);background:#fff;font-size:1.2rem;letter-spacing:.4em;text-align:center;outline:none;margin-bottom:12px;font-family:'Cormorant Garamond',serif}
+.pin-box input:focus{box-shadow:0 0 0 3px rgba(201,168,76,.25)}
+.pin-btn{width:100%;padding:14px;background:var(--gold);border:none;color:var(--green);font-family:'Lato',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.pin-btn:hover{background:var(--gold-soft)}
+.pin-err{color:var(--red);font-size:.84rem;margin-top:10px;min-height:20px}
+
+/* ADMIN APP */
+#adminApp{display:none;min-height:100vh}
+.admin-header{background:var(--green);padding:16px 26px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,168,76,.35)}
+.admin-header h1{font-family:'Cormorant Garamond',serif;color:var(--gold-soft);font-size:1.5rem}
+.admin-header a{color:var(--gold-soft);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid rgba(201,168,76,.4)}
+
+/* TABS */
+.atabs{display:flex;gap:0;border-bottom:2px solid rgba(201,168,76,.4);padding:0 22px;background:#fff;overflow-x:auto}
+.atab{background:none;border:none;padding:14px 22px;font-family:'Lato',sans-serif;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;white-space:nowrap}
+.atab.active{color:var(--green);border-color:var(--gold);font-weight:700}
+.atab:hover{color:var(--green)}
+
+/* PANELS */
+.apanel{display:none;padding:28px 22px;max-width:1200px}
+.apanel.active{display:block}
+
+/* TABLE */
+.admin-table{width:100%;border-collapse:collapse;font-size:.9rem}
+.admin-table th{text-align:left;padding:10px 12px;background:var(--green);color:var(--gold-soft);font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;white-space:nowrap}
+.admin-table td{padding:9px 12px;border-bottom:1px solid rgba(201,168,76,.2);vertical-align:middle}
+.admin-table tr:hover td{background:rgba(201,168,76,.06)}
+.price-in{border:1px solid rgba(201,168,76,.5);padding:6px 8px;font-family:'Lato',sans-serif;font-size:.9rem;color:var(--ink);outline:none}
+.price-in:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,168,76,.2)}
+
+/* SWITCH */
+.sw{position:relative;display:inline-block;width:40px;height:22px;cursor:pointer}
+.sw input{opacity:0;width:0;height:0}
+.sl{position:absolute;inset:0;background:#ccc;border-radius:99px;transition:background .25s}
+.sl::before{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .25s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sw input:checked + .sl{background:var(--gold)}
+.sw input:checked + .sl::before{transform:translateX(17px)}
+
+/* TAGS */
+.tag{font-size:.68rem;font-weight:700;letter-spacing:.08em;padding:3px 8px;border-radius:99px}
+.tag.veg{background:#E4EEE2;color:#27592F;border:1px solid #8FB78A}
+.tag.nveg{background:#F5E3DE;color:var(--red);border:1px solid #D49584}
+
+/* BUTTONS */
+.btn-a{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border:1px solid var(--gold);background:var(--green);color:var(--gold-soft);font-family:'Lato',sans-serif;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-a:hover{background:var(--gold);color:var(--green)}
+.btn-a.outline{background:transparent;color:var(--green)}
+.btn-a.outline:hover{background:rgba(201,168,76,.12)}
+.btn-a.danger{border-color:var(--red);color:var(--red)}
+.btn-a.danger:hover{background:var(--red);color:#fff}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+
+/* SPECIALS */
+.special-row{background:#fff;border:1px solid rgba(201,168,76,.35);padding:16px;margin-bottom:12px}
+.sr-fields{display:grid;grid-template-columns:1fr 1fr 100px 1fr 44px;gap:10px;margin-bottom:10px;align-items:center}
+.sr-fields input[type="text"],.sr-fields input[type="number"],.sr-fields input:not([type]){padding:9px 12px;border:1px solid rgba(201,168,76,.4);font-family:'Lato',sans-serif;font-size:.9rem;color:var(--ink);outline:none;width:100%}
+.sr-fields input:focus{border-color:var(--gold)}
+.sr-fields input[type="color"]{height:38px;border:1px solid rgba(201,168,76,.4);padding:2px;cursor:pointer}
+.del-special{background:none;border:1px solid var(--red);color:var(--red);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;cursor:pointer;transition:all .2s}
+.del-special:hover{background:var(--red);color:#fff}
+@media(max-width:640px){.sr-fields{grid-template-columns:1fr 1fr;}}
+
+
+/* HISTORY TABLE */
+.hist-wrap{overflow-x:auto}
+.admin-table.hist th{font-size:.78rem}
+
+/* TOAST */
+#adminToast{position:fixed;bottom:28px;right:28px;background:var(--green);color:var(--gold-soft);padding:12px 22px;font-size:.85rem;border:1px solid rgba(201,168,76,.4);opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}
+
+/* section heading */
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--green);margin-bottom:6px}
+.sec-note{color:var(--muted);font-size:.88rem;margin-bottom:22px}
+
+/* local-only warning */
+.local-warn{background:#7a3a10;color:#fff;padding:12px 22px;font-size:.85rem;text-align:center;display:none}
+.local-warn b{color:#ffd580}
+</style>
+</head>
+<body>
+
+<!-- PIN GATE -->
+<div id="pinGate">
+  <div class="pin-box">
+    <h1>Shika's Kitchen</h1>
+    <p>Admin Panel — Enter your PIN to continue</p>
+    <form id="pinForm">
+      <input type="password" id="pinInput" maxlength="20" placeholder="• • • • • •" required autocomplete="current-password">
+      <button type="submit" class="pin-btn">Unlock</button>
+    </form>
+    <p class="pin-err" id="pinError"></p>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp">
+<div class="local-warn" id="localWarn">
+  <b>Read-only mode.</b> You are viewing the admin panel on the live site. To make changes, run <b>start.bat</b> on your computer and open <b>http://localhost:3000/admin.html</b> instead.
+</div>
+  <div class="admin-header">
+    <h1>Shika's Kitchen — Admin</h1>
+    <a href="index.html" target="_blank">↗ View site</a>
+  </div>
+
+  <div class="atabs">
+    <button class="atab active" data-panel="panelMenu">Menu Editor</button>
+    <button class="atab" data-panel="panelSpecials">Weekly Specials</button>
+    <button class="atab" data-panel="panelClosure">Closure Notice</button>
+    <button class="atab" data-panel="panelHistory">Order History</button>
+    <button class="atab" data-panel="panelAnalytics">Analytics</button>
+    <button class="atab" data-panel="panelTestimonials">Reviews</button>
+    <button class="atab" data-panel="panelFaq">FAQ</button>
+    <button class="atab" data-panel="panelSettings">Settings</button>
+  </div>
+
+  <!-- TAB 1: MENU EDITOR -->
+  <div class="apanel active" id="panelMenu">
+    <p class="sec-title">Menu Editor</p>
+    <p class="sec-note">Toggle availability, mark popular dishes, or adjust prices. Changes take effect on the next customer page load.</p>
+    <div style="overflow-x:auto">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Dish</th>
+            <th>Type</th>
+            <th>Price (Rs)</th>
+            <th>Available</th>
+            <th>Popular</th>
+          </tr>
+        </thead>
+        <tbody id="menuTbody"></tbody>
+      </table>
+    </div>
+    <div class="btn-row">
+      <button class="btn-a danger outline" id="resetOverrides">Reset all to defaults</button>
+    </div>
+  </div>
+
+  <!-- TAB 2: WEEKLY SPECIALS -->
+  <div class="apanel" id="panelSpecials">
+    <p class="sec-title">Weekly Specials</p>
+    <p class="sec-note">Add up to 5 specials that appear in a highlighted strip on the menu page. Leave empty to hide the section.</p>
+    <div id="specialsList"></div>
+    <div class="btn-row">
+      <button class="btn-a outline" id="addSpecial">+ Add Special</button>
+      <button class="btn-a" id="saveSpecials">Save Specials</button>
+    </div>
+  </div>
+
+
+  <!-- TAB 3: CLOSURE NOTICE -->
+  <div class="apanel" id="panelClosure">
+    <p class="sec-title">Closure Notice</p>
+    <p class="sec-note">When enabled, a red banner appears at the top of the customer page. Update content.json to make it permanent across devices.</p>
+    <div style="background:#fff;border:1px solid rgba(201,168,76,.3);padding:24px;max-width:520px;display:grid;gap:18px">
+      <div style="display:flex;align-items:center;gap:16px">
+        <label class="sw"><input type="checkbox" id="closureEnabled"><span class="sl"></span></label>
+        <span style="font-size:.88rem;color:var(--ink)">Show closure notice on site</span>
+      </div>
+      <div>
+        <label style="display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Notice Message</label>
+        <textarea id="closureMsg" rows="3" placeholder="We are closed this weekend. We will be back next weekend!" style="width:100%;padding:10px 12px;border:1px solid rgba(201,168,76,.4);font-family:'Lato',sans-serif;font-size:.9rem;outline:none;resize:vertical;line-height:1.5"></textarea>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-a" id="saveClosure">Save &amp; Apply</button>
+      <button class="btn-a danger outline" id="clearClosure">Turn Off</button>
+    </div>
+  </div>
+
+  <!-- TAB 4: ORDER HISTORY -->
+  <div class="apanel" id="panelHistory">
+    <p class="sec-title">Order History</p>
+    <p class="sec-note">All orders sent via the WhatsApp button are recorded here. Clear the history once exported if needed.</p>
+    <p id="histEmpty" style="color:var(--muted);font-style:italic;display:none">No orders recorded yet.</p>
+    <div class="hist-wrap">
+      <table class="admin-table hist">
+        <thead>
+          <tr>
+            <th>Date</th><th>Customer</th><th>Phone</th><th>Dish</th><th>Qty</th><th>Note</th><th>Unit</th><th>Line</th><th>Bowls</th><th>Total</th><th>Day</th><th>Time</th>
+          </tr>
+        </thead>
+        <tbody id="histTbody"></tbody>
+      </table>
+    </div>
+    <div class="btn-row">
+      <button class="btn-a" id="downloadCsv">Download CSV</button>
+      <button class="btn-a danger outline" id="clearHistory">Clear History</button>
+    </div>
+  </div>
+  <!-- TAB 5: ANALYTICS -->
+  <div class="apanel" id="panelAnalytics">
+    <p class="sec-title">Analytics</p>
+    <p class="sec-note">Computed from order history stored in this browser. No data is sent anywhere.</p>
+    <div id="analyticsContent" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:900px">
+      <div style="background:#fff;border:1px solid rgba(201,168,76,.3);padding:20px">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--green);margin-bottom:12px">Top Dishes</p>
+        <canvas id="chartTop" width="360" height="220"></canvas>
+      </div>
+      <div style="background:#fff;border:1px solid rgba(201,168,76,.3);padding:20px">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--green);margin-bottom:12px">Revenue by Category</p>
+        <canvas id="chartCat" width="360" height="220"></canvas>
+      </div>
+      <div style="background:#fff;border:1px solid rgba(201,168,76,.3);padding:20px">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--green);margin-bottom:12px">Orders by Day</p>
+        <canvas id="chartDay" width="360" height="220"></canvas>
+      </div>
+      <div style="background:#fff;border:1px solid rgba(201,168,76,.3);padding:20px">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--green);margin-bottom:12px">Summary</p>
+        <div id="analyticsSummary" style="font-size:.95rem;line-height:2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 6: TESTIMONIALS -->
+  <div class="apanel" id="panelTestimonials">
+    <p class="sec-title">Customer Reviews</p>
+    <p class="sec-note">These reviews are shown on the homepage. If none are saved here, the defaults from data.js are used.</p>
+    <div id="testimonialsEditor"></div>
+    <div class="btn-row">
+      <button class="btn-a outline" id="addTestimonial">+ Add Review</button>
+      <button class="btn-a" id="saveTestimonials">Save Reviews</button>
+      <button class="btn-a danger outline" id="resetTestimonials">Reset to Defaults</button>
+    </div>
+  </div>
+
+  <!-- TAB 7: FAQ -->
+  <div class="apanel" id="panelFaq">
+    <p class="sec-title">FAQ Editor</p>
+    <p class="sec-note">Edit the questions and answers shown on the FAQ section of the homepage.</p>
+    <div id="faqEditor"></div>
+    <div class="btn-row">
+      <button class="btn-a outline" id="addFaq">+ Add Question</button>
+      <button class="btn-a" id="saveFaq">Save FAQ</button>
+      <button class="btn-a danger outline" id="resetFaq">Reset to Defaults</button>
+    </div>
+  </div>
+
+  <!-- TAB 8: SETTINGS -->
+  <div class="apanel" id="panelSettings">
+    <p class="sec-title">Site Settings</p>
+    <p class="sec-note">These settings override the defaults used in app.js. Changes take effect on next customer page load.</p>
+    <div style="background:#fff;border:1px solid rgba(201,168,76,.3);padding:24px;max-width:520px;display:grid;gap:18px">
+      <div>
+        <label style="display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">WhatsApp Number (digits only)</label>
+        <input type="text" id="settingWA" placeholder="23058290809" style="width:100%;padding:10px 12px;border:1px solid rgba(201,168,76,.4);font-family:'Lato',sans-serif;font-size:.95rem;outline:none">
+      </div>
+      <div>
+        <label style="display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Minimum Order Amount (Rs)</label>
+        <input type="number" id="settingMinOrder" placeholder="200" min="0" style="width:100%;padding:10px 12px;border:1px solid rgba(201,168,76,.4);font-family:'Lato',sans-serif;font-size:.95rem;outline:none">
+      </div>
+      <div>
+        <label style="display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Collection Days (comma separated)</label>
+        <input type="text" id="settingDays" placeholder="Saturday,Sunday" style="width:100%;padding:10px 12px;border:1px solid rgba(201,168,76,.4);font-family:'Lato',sans-serif;font-size:.95rem;outline:none">
+      </div>
+      <div>
+        <label style="display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Collection Times (comma separated)</label>
+        <input type="text" id="settingTimes" placeholder="5:00 PM,5:30 PM,6:00 PM,6:30 PM,7:00 PM,7:30 PM" style="width:100%;padding:10px 12px;border:1px solid rgba(201,168,76,.4);font-family:'Lato',sans-serif;font-size:.95rem;outline:none">
+      </div>
+      <div>
+        <label style="display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Dish of the Weekend (Dish ID number)</label>
+        <input type="number" id="settingDotw" placeholder="Leave blank to disable" min="0" style="width:100%;padding:10px 12px;border:1px solid rgba(201,168,76,.4);font-family:'Lato',sans-serif;font-size:.95rem;outline:none">
+      </div>
+    </div>
+
+    <p class="sec-title" style="margin-top:32px">Social &amp; External Links</p>
+    <p class="sec-note">Leave blank to hide a link from the site. Include the full URL with https://</p>
+    <div style="background:#fff;border:1px solid rgba(201,168,76,.3);padding:24px;max-width:520px;display:grid;gap:18px">
+      <div>
+        <label style="display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Facebook URL</label>
+        <input type="url" id="socialFacebook" placeholder="https://www.facebook.com/..." style="width:100%;padding:10px 12px;border:1px solid rgba(201,168,76,.4);font-family:'Lato',sans-serif;font-size:.95rem;outline:none">
+      </div>
+      <div>
+        <label style="display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Instagram URL</label>
+        <input type="url" id="socialInstagram" placeholder="https://www.instagram.com/..." style="width:100%;padding:10px 12px;border:1px solid rgba(201,168,76,.4);font-family:'Lato',sans-serif;font-size:.95rem;outline:none">
+      </div>
+      <div>
+        <label style="display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">TikTok URL</label>
+        <input type="url" id="socialTiktok" placeholder="https://www.tiktok.com/..." style="width:100%;padding:10px 12px;border:1px solid rgba(201,168,76,.4);font-family:'Lato',sans-serif;font-size:.95rem;outline:none">
+      </div>
+      <div>
+        <label style="display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Twitter / X URL</label>
+        <input type="url" id="socialTwitter" placeholder="https://x.com/..." style="width:100%;padding:10px 12px;border:1px solid rgba(201,168,76,.4);font-family:'Lato',sans-serif;font-size:.95rem;outline:none">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-a" id="saveSettings">Save Settings</button>
+      <button class="btn-a danger outline" id="resetSettings">Reset to Defaults</button>
+    </div>
+  </div>
+  <!-- TAB 9: EXPORT / IMPORT JSON -->
+</div>
+
+<div id="adminToast"></div>
+
+<script src="data.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

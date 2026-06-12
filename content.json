@@ -1,0 +1,76 @@
+{
+  "siteSettings": {
+    "waNumber": "23058290809",
+    "minOrder": 200,
+    "collectionDays": ["Saturday", "Sunday"],
+    "collectionTimes": ["11:30 AM–12:30 PM", "12:30 PM–1:30 PM", "5:30 PM–6:30 PM", "6:30 PM–7:30 PM", "7:30 PM–8:00 PM"],
+    "dishOfWeekend": null
+  },
+  "socialLinks": {
+    "facebook": "https://www.facebook.com/share/18seiTi6Ei/",
+    "instagram": "https://www.instagram.com/shikas.homekitchen?igsh=aHloeDIxZGFkbGJu",
+    "tiktok": "",
+    "twitter": ""
+  },
+  "closure": {
+    "enabled": false,
+    "message": "We are closed this weekend. We will be back next weekend — thank you for your patience!"
+  },
+  "specials": [],
+  "testimonials": [],
+  "menuOverrides": {},
+  "faqs": [
+    {
+      "q": "How do I place an order?",
+      "a": "Browse the menu on this page, add your dishes to the cart, enter your name and WhatsApp number, choose a pickup slot, then tap 'Send Order via WhatsApp'. Your order goes straight to us as a message."
+    },
+    {
+      "q": "When is the order deadline?",
+      "a": "All orders must be placed by Friday at 9:00 AM. This gives us time to shop for fresh ingredients and prepare everything for the weekend. Orders received after the deadline cannot be accepted for that weekend."
+    },
+    {
+      "q": "What are the collection days and times?",
+      "a": "Collection is on Saturday and Sunday only. You can choose from five time slots: 11:30 AM–12:30 PM, 12:30 PM–1:30 PM, 5:30 PM–6:30 PM, 6:30 PM–7:30 PM, or 7:30 PM–8:00 PM."
+    },
+    {
+      "q": "Is there home delivery?",
+      "a": "No — we operate on a collection-only basis. There is no delivery service. You collect your order at the arranged time and location confirmed via WhatsApp."
+    },
+    {
+      "q": "What is the minimum order amount?",
+      "a": "The minimum order is Rs 200. If your cart total is below Rs 200, the WhatsApp order button will remain disabled until you add more items."
+    },
+    {
+      "q": "Is there a maximum order limit?",
+      "a": "Yes — orders are capped at 25 portions in total across all dishes. This ensures every customer receives freshly prepared food. For larger quantities, please contact us directly on WhatsApp at +230 5829 0809."
+    },
+    {
+      "q": "Can I choose my spice level?",
+      "a": "Yes. On dishes that are spicy, you will see a Mild / Medium / Hot selector directly on the dish card. Your chosen level is included in the order message sent to us."
+    },
+    {
+      "q": "Are takeaway bowls available?",
+      "a": "Yes — you can add takeaway bowls for an additional Rs 25. Simply tick the 'Add takeaway bowls' option in the cart before sending your order."
+    },
+    {
+      "q": "Are the dishes freshly cooked?",
+      "a": "Every single dish is cooked fresh on the day of collection — no pre-cooking, no reheating, no preservatives. Small batches, home-style recipes, every weekend."
+    },
+    {
+      "q": "Can I add a special request or note?",
+      "a": "Yes. After adding a dish to your cart, tap 'Add note' on that item to leave a specific request — for example, no onions, extra sauce, or a dietary preference."
+    },
+    {
+      "q": "How will I know my order is confirmed?",
+      "a": "Once you send your order via WhatsApp, we will reply directly in the chat to confirm your order, total, and pickup slot — usually within a few hours of receiving your message."
+    },
+    {
+      "q": "What cuisines are available?",
+      "a": "We offer dishes from four cuisines: Mauritian (curries, briyani, dholl puri), Indian (butter chicken, paneer, dal), Italian (lasagna, pasta, soups), and Chinese (fried rice, chow mein, bol renversé)."
+    },
+    {
+      "q": "Can I order for a large group?",
+      "a": "Online orders are capped at 25 portions. For larger groups or events, please contact us directly on WhatsApp at +230 5829 0809 to arrange a custom order."
+    }
+  ]
+}
