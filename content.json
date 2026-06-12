@@ -27,6 +27,45 @@
   },
   "orders": [
     {
+      "date": 1781281725990,
+      "customer": "Ushika Jeeta",
+      "phone": "+23058290809",
+      "items": [
+        {
+          "id": 51,
+          "name": "Bouillon Crabe",
+          "qty": 1,
+          "price": 135,
+          "note": ""
+        },
+        {
+          "id": 72,
+          "name": "Saute Poulet",
+          "qty": 1,
+          "price": 120,
+          "note": ""
+        },
+        {
+          "id": 74,
+          "name": "Oeuf Roti",
+          "qty": 1,
+          "price": 35,
+          "note": ""
+        },
+        {
+          "id": 76,
+          "name": "Les Ailes Frire",
+          "qty": 1,
+          "price": 125,
+          "note": ""
+        }
+      ],
+      "bowls": true,
+      "total": 515,
+      "pickupDay": "Sunday",
+      "pickupTime": "6:30 PM–7:30 PM"
+    },
+    {
       "date": 1781281644571,
       "customer": "Ushika Jeeta",
       "phone": "+23058290809",
