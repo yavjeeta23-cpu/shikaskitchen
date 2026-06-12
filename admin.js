@@ -213,6 +213,7 @@ document.getElementById('clearClosure')?.addEventListener('click', function() {
 
 /* ==== TAB 4: ORDER HISTORY (localStorage — customer data) ==== */
 function getHistory() {
+  if (!IS_LOCAL) return (CONTENT.orders || []);
   try { return JSON.parse(localStorage.getItem('shika_history') || '[]'); } catch(e) { return []; }
 }
 

@@ -9,6 +9,9 @@
 [functions."review"]
   included_files = ["content.json"]
 
+[functions."order"]
+  included_files = ["content.json"]
+
 [[headers]]
   for = "/.netlify/functions/*"
   [headers.values]

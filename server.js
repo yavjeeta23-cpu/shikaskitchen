@@ -87,6 +87,28 @@ const server = http.createServer(function(req, res) {
     return;
   }
 
+  /* ---- POST /api/order  — append a customer order ---- */
+  if (req.method === 'POST' && url === '/api/order') {
+    readBody(req).then(function(body) {
+      try {
+        const order = JSON.parse(body);
+        const contentPath = path.join(ROOT, 'content.json');
+        const content = JSON.parse(fs.readFileSync(contentPath, 'utf8'));
+        content.orders = content.orders || [];
+        content.orders.unshift(order);
+        fs.writeFileSync(contentPath, JSON.stringify(content, null, 2), 'utf8');
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true }));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: false, error: e.message }));
+      }
+    }).catch(function(e) {
+      res.writeHead(500); res.end('Error: ' + e.message);
+    });
+    return;
+  }
+
   /* ---- Serve static files ---- */
   let filePath = path.join(ROOT, url === '/' ? 'index.html' : url);
 

@@ -25,6 +25,7 @@
     "enabled": false,
     "message": "We are closed this weekend. We will be back next weekend — thank you for your patience!"
   },
+  "orders": [],
   "specials": [],
   "testimonials": [],
   "menuOverrides": {

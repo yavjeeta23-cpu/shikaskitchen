@@ -211,6 +211,7 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;color:var(--green);font-weight:6
 .spice-btn[data-spice="mild"].active{background:#d4edda;border-color:#27ae60;color:#155724}
 .spice-btn[data-spice="medium"].active{background:#fff3cd;border-color:#f39c12;color:#856404}
 .spice-btn[data-spice="hot"].active{background:#f8d7da;border-color:#e74c3c;color:#721c24}
+@media(max-width:600px){.spice-btn{padding:8px 14px;font-size:.75rem;min-height:36px}}
 
 /* weekend pick */
 .dish.weekend-pick{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}

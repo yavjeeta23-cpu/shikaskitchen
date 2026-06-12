@@ -11,6 +11,7 @@ let _siteContent = null;
 const _isLocal   = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 const _saveUrl   = _isLocal ? '/api/save'   : '/.netlify/functions/save';
 const _reviewUrl = _isLocal ? '/api/review' : '/.netlify/functions/review';
+const _orderUrl  = _isLocal ? '/api/order'  : '/.netlify/functions/order';
 
 function getSiteSettings(){
   return (_siteContent && _siteContent.siteSettings) || {};
@@ -602,10 +603,12 @@ function sendToWhatsApp(){
   });
   let total=0;
   picked.forEach(function(v,id){ const m=mergedMenu.find(function(x){return x.id===id;}); if(m) total+=m.p*v.qty; });
-  total+=bowls?25:0;
+  total+=bowls?25*totalPortions():0;
+  const order={date:Date.now(),customer:name,phone:phone,items:items,bowls:bowls,total:total,pickupDay:selectedDay,pickupTime:selectedTime};
   const hist=getHistory();
-  hist.push({date:Date.now(),customer:name,phone:phone,items:items,bowls:bowls,total:total,pickupDay:selectedDay,pickupTime:selectedTime});
+  hist.push(order);
   localStorage.setItem('shika_history',JSON.stringify(hist));
+  fetch(_orderUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)}).catch(function(){});
   window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
   showToast('Opening WhatsApp...');
 }
