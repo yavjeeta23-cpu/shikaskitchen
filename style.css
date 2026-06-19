@@ -140,7 +140,11 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;color:var(--green);font-weight:6
 .stat-item .stat-num{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,3.8rem);color:var(--gold);font-weight:700;line-height:1;display:block}
 .stat-item .stat-label{color:var(--off);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;margin-top:8px;display:block;font-weight:600}
 .stat-item .stat-sub{color:rgba(243,238,227,.5);font-size:.72rem;margin-top:4px;display:block;font-style:italic}
-@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}.stat-item{border-right:none;border-bottom:1px solid rgba(201,168,76,.15);padding:20px 12px}.stat-item:last-child{border-bottom:none}}
+@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}.stat-item{border-right:none;border-bottom:1px solid rgba(201,168,76,.15);padding:20px 12px}.stat-item:last-child{border-bottom:none}
+.hero{min-height:70vh}.hero-content{padding:36px 20px 24px}.hero-logo{width:88px;height:88px}.countdown-wrap{gap:14px}
+.section{padding:40px 18px}.section-head{margin-bottom:18px}.stats-band{padding:28px 18px}
+.info{padding:30px 18px 36px}.specials-section{padding:18px 18px 24px}.step{padding:18px 16px}
+footer{padding:30px 18px 20px}.food-gallery{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
 
 /* ---------- sections ---------- */
 .section{padding:84px 22px}
