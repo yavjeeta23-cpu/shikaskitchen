@@ -140,11 +140,7 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;color:var(--green);font-weight:6
 .stat-item .stat-num{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,3.8rem);color:var(--gold);font-weight:700;line-height:1;display:block}
 .stat-item .stat-label{color:var(--off);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;margin-top:8px;display:block;font-weight:600}
 .stat-item .stat-sub{color:rgba(243,238,227,.5);font-size:.72rem;margin-top:4px;display:block;font-style:italic}
-@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}.stat-item{border-right:none;border-bottom:1px solid rgba(201,168,76,.15);padding:20px 12px}.stat-item:last-child{border-bottom:none}
-.hero{min-height:70vh}.hero-content{padding:36px 20px 24px}.hero-logo{width:88px;height:88px}.countdown-wrap{gap:14px}
-.section{padding:40px 18px}.section-head{margin-bottom:18px}.stats-band{padding:28px 18px}
-.info{padding:30px 18px 36px}.specials-section{padding:18px 18px 24px}.step{padding:18px 16px}
-footer{padding:30px 18px 20px}.food-gallery{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
+@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}.stat-item{border-right:none;border-bottom:1px solid rgba(201,168,76,.15);padding:20px 12px}.stat-item:last-child{border-bottom:none}}
 
 /* ---------- sections ---------- */
 .section{padding:84px 22px}
@@ -567,4 +563,49 @@ kbd{background:rgba(201,168,76,.25);border:1px solid rgba(201,168,76,.5);border-
   .section:not(#print-section){display:none!important}
   .hero{min-height:auto;padding:20px;background:#fff!important;color:#000;page-break-after:always}
   .hero h1{color:#000;text-shadow:none}
+}
+
+/* ========== MOBILE OVERRIDES (must be at end to win cascade) ========== */
+@media(max-width:600px){
+  /* hero — smaller, no fixed bg (iOS glitch) */
+  .hero{min-height:65vh;background-attachment:scroll}
+  .hero::before,.hero::after{inset:10px}
+  .hero-content{padding:28px 16px 20px}
+  .hero-logo{width:80px;height:80px}
+  .hero h1{font-size:clamp(2.6rem,10vw,3.8rem)}
+  .hero-sub{font-size:.88rem;margin:12px auto 6px}
+  .hero-ctas{gap:10px;margin-top:18px}
+  .btn{padding:12px 22px;font-size:.78rem}
+  .hero-social{margin-top:12px;gap:8px}
+  .share-btn{padding:6px 12px;font-size:.68rem}
+
+  /* countdowns — stack vertically */
+  .countdown-wrap{flex-direction:column;gap:14px;margin-top:20px}
+  .countdown2{border-left:none;border-top:1px solid rgba(201,168,76,.3);padding-left:0;padding-top:14px}
+
+  /* sections — half the padding */
+  .section{padding:36px 16px}
+  .section-head{margin-bottom:16px}
+  .section-head h2{font-size:clamp(1.7rem,6vw,2.2rem)}
+
+  /* info */
+  .info{padding:28px 16px 32px}
+  .info-grid{gap:14px}
+  .info-card{padding:20px 16px}
+
+  /* specials */
+  .specials-section{padding:16px 16px 22px}
+
+  /* stats */
+  .stats-band{padding:24px 16px}
+
+  /* steps */
+  .step{padding:16px 14px}
+
+  /* gallery — 2 columns */
+  .food-gallery{grid-template-columns:repeat(2,1fr)}
+
+  /* footer */
+  footer{padding:28px 16px 18px}
+  .foot-grid{gap:24px}
 }
